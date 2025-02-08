@@ -1,0 +1,67 @@
+{% extends "base.html" %}
+
+{% block title %}Joueurs - Application Loto{% endblock %}
+
+{% block content %}
+    <h2>Liste des joueurs inscrits</h2>
+    <p>Nombre de joueurs inscrits : {{ joueurs|length }}</p>
+
+    <!-- Formulaire pour générer automatiquement des joueurs -->
+    <h3>Générer automatiquement des joueurs</h3>
+    <form action="{{ url_for('simuler_joueurs') }}" method="post">
+        <label for="nb_joueurs">Nombre de joueurs à générer :</label>
+        <input type="number" id="nb_joueurs" name="nb_joueurs" min="1" max="100" required>
+        <button type="submit">Générer</button>
+    </form>
+
+    <table>
+        <tr>
+            <th>Pseudo</th>
+            <th>Numéros</th>
+            <th>Étoiles</th>
+            <th>Participe au tirage</th>
+            <th>Actions</th>
+        </tr>
+        {% for joueur in joueurs %}
+        <tr>
+            <td>{{ joueur.pseudo }}</td>
+            <!-- Affichage des numéros avec les classes CSS pour les boules -->
+            <td>
+                <div class="boules">
+                    {% for num in joueur.numeros.split(',') %}
+                    <div class="boule">{{ num }}</div>
+                    {% endfor %}
+                </div>
+            </td>
+            <!-- Affichage des étoiles avec les classes CSS pour les étoiles -->
+            <td>
+                <div class="etoiles">
+                    {% for star in joueur.etoiles.split(',') %}
+                    <div class="etoile">{{ star }}</div>
+                    {% endfor %}
+                </div>
+            </td>
+            <td>{{ 'Oui' if joueur.participation else 'Non' }}</td>
+            <td>
+                <!-- Formulaire pour modifier la participation -->
+                <form action="{{ url_for('modifier_participation', id=joueur.id) }}" method="post" style="display:inline;">
+                    {% if joueur.participation %}
+                        <input type="submit" value="Ne plus participer">
+                    {% else %}
+                        <input type="submit" value="Participer">
+                    {% endif %}
+                </form>
+                <!-- Lien pour modifier les numéros et étoiles -->
+                <a href="{{ url_for('modifier_numeros', id=joueur.id) }}">Modifier numéros</a>
+                <!-- Lien pour supprimer le joueur -->
+                <a href="{{ url_for('supprimer_joueur', id=joueur.id) }}">Supprimer</a>
+            </td>
+        </tr>
+        {% endfor %}
+    </table>
+    <!-- Add this section to your template where you want the button to appear -->
+<form action="{{ url_for('supprimer_tous_les_joueurs') }}" method="post" onsubmit="return confirm('Êtes-vous sûr de vouloir supprimer tous les joueurs ?');">
+    <button type="submit" class="btn btn-danger">Supprimer tous les joueurs</button>
+</form>
+
+{% endblock %}

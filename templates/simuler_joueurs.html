@@ -1,0 +1,16 @@
+{% extends "base.html" %}
+
+{% block title %}Simuler des joueurs - Application Loto{% endblock %}
+
+{% block content %}
+    <h2>Simuler des joueurs</h2>
+    <form method="post">
+        <label for="nb_joueurs">Nombre de joueurs à simuler :</label>
+        <input type="number" name="nb_joueurs" min="1" max="100" required>
+        <label>
+            <input type="checkbox" name="participation" checked>
+            Les joueurs participent au tirage
+        </label>
+        <input type="submit" value="Simuler">
+    </form>
+{% endblock %}

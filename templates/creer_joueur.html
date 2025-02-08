@@ -1,0 +1,78 @@
+{% extends "base.html" %}
+
+{% block title %}Créer un joueur - Application Loto{% endblock %}
+
+{% block content %}
+    <h2>Créer un nouveau joueur</h2>
+    <form method="post">
+        <label for="pseudo">Pseudo :</label>
+        <input type="text" name="pseudo" required>
+        <br><br>
+        <label>
+            <input type="checkbox" name="participation" checked>
+            Participer au tirage
+        </label>
+        <br><br>
+        <label>
+            <input type="checkbox" name="auto_generate" id="auto_generate" checked onchange="toggleNumberSelection()">
+            Générer automatiquement les numéros et étoiles
+        </label>
+        <br><br>
+        <div id="number_selection" style="display: none;">
+            <h3>Choisissez vos numéros (5 numéros entre 1 et 49)</h3>
+            <div class="grid">
+                {% for number in range(1, 50) %}
+                    <label>
+                        <input type="checkbox" name="numeros" value="{{ number }}">
+                        {{ '%02d' | format(number) }}
+                    </label>
+                    {% if number % 10 == 0 %}
+                        <br>
+                    {% endif %}
+                {% endfor %}
+            </div>
+            <br>
+            <h3>Choisissez vos étoiles (2 étoiles entre 1 et 9)</h3>
+            <div class="grid">
+                {% for star in range(1, 10) %}
+                    <label>
+                        <input type="checkbox" name="etoiles" value="{{ star }}">
+                        {{ star }}
+                    </label>
+                    {% if star % 10 == 0 %}
+                        <br>
+                    {% endif %}
+                {% endfor %}
+            </div>
+        </div>
+        <br>
+        <input type="submit" value="Créer">
+    </form>
+
+    <script>
+        function toggleNumberSelection() {
+            var checkBox = document.getElementById("auto_generate");
+            var numberSelectionDiv = document.getElementById("number_selection");
+            if (checkBox.checked == true){
+                numberSelectionDiv.style.display = "none";
+            } else {
+                numberSelectionDiv.style.display = "block";
+            }
+        }
+        // Initialise l'affichage lors du chargement de la page
+        window.onload = function() {
+            toggleNumberSelection();
+        };
+    </script>
+
+    <style>
+        .grid {
+            display: grid;
+            grid-template-columns: repeat(10, 1fr);
+            gap: 5px;
+        }
+        .grid label {
+            display: block;
+        }
+    </style>
+{% endblock %}

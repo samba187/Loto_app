@@ -1,0 +1,57 @@
+{% extends "base.html" %}
+
+{% block title %}Modifier les numéros - {{ joueur.pseudo }}{% endblock %}
+
+{% block content %}
+    <h2>Modifier les numéros et étoiles de {{ joueur.pseudo }}</h2>
+    <form method="POST">
+        <h3>Numéros (choisissez 5 numéros entre 1 et 49) :</h3>
+<div class="boules">
+    {% for num in range(1, 50) %}
+    <label class="boule {% if num in joueur_numeros %}selected{% endif %}">
+        <input type="checkbox" name="numeros" value="{{ num }}"
+               {% if num in joueur_numeros %}checked{% endif %}>
+        {{ num }}
+    </label>
+    {% endfor %}
+</div>
+
+<!-- Pour les étoiles -->
+<div class="etoiles">
+    {% for star in range(1, 10) %}
+    <label class="etoile {% if star in joueur_etoiles %}selected{% endif %}">
+        <input type="checkbox" name="etoiles" value="{{ star }}"
+               {% if star in joueur_etoiles %}checked{% endif %}>
+        {{ star }}
+    </label>
+    {% endfor %}
+</div>
+
+        <br>
+        <button type="submit">Mettre à jour</button>
+        <a href="{{ url_for('joueurs') }}">Annuler</a>
+    </form>
+    <script>
+        document.querySelectorAll('.boule, .etoile').forEach(function(element) {
+            element.addEventListener('click', function(event) {
+                event.preventDefault(); 
+                const input = this.querySelector('input');
+                const isBoule = this.classList.contains('boule');
+                const maxSelection = isBoule ? 5 : 2;
+                const selectedElements = document.querySelectorAll('.' + (isBoule ? 'boule' : 'etoile') + '.selected');
+                if (input.checked) {
+                    input.checked = false;
+                    this.classList.remove('selected');
+                } else {
+                    if (selectedElements.length >= maxSelection) {
+                        alert('Vous ne pouvez sélectionner que ' + maxSelection + ' ' + (isBoule ? 'numéros' : 'étoiles') + '.');
+                        return;
+                    }
+                    input.checked = true;
+                    this.classList.add('selected');
+                }
+            });
+        });
+    </script>
+    
+{% endblock %}

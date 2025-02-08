@@ -1,0 +1,12 @@
+{% extends "base.html" %}
+
+{% block title %}Supprimer un joueur - Application Loto{% endblock %}
+
+{% block content %}
+    <h2>Supprimer le joueur {{ joueur.pseudo }}</h2>
+    <p>Êtes-vous sûr de vouloir supprimer ce joueur ? Cette action est irréversible.</p>
+    <form method="post">
+        <input type="submit" value="Supprimer">
+        <a href="{{ url_for('index') }}">Annuler</a>
+    </form>
+{% endblock %}

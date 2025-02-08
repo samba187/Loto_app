@@ -1,0 +1,62 @@
+<!-- templates/base.html -->
+
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <title>{% block title %}Application Loto{% endblock %}</title>
+    <link rel="stylesheet" href="{{ url_for('static', filename='styles.css') }}">
+    
+    <style>
+        .alert {
+            padding: 15px;
+            margin-bottom: 20px;
+            border: 1px solid transparent;
+            border-radius: 4px;
+        }
+        .alert-success {
+            color: #155724;
+            background-color: #d4edda;
+            border-color: #c3e6cb;
+        }
+        .alert-error {
+            color: #721c24;
+            background-color: #f8d7da;
+            border-color: #f5c6cb;
+        }
+    </style>
+</head>
+<body>
+
+    <header>
+        <h1>Application Loto</h1>
+    </header>
+
+    <nav class="navbar">
+        <div class="container">
+            <a href="{{ url_for('index') }}">Accueil</a>
+            <a href="{{ url_for('joueurs') }}">Joueurs</a>
+
+            <a href="{{ url_for('lancer_tirage') }}">Lancer un tirage</a>
+            <a href="{{ url_for('afficher_resultats') }}">Résultats du dernier tirage</a>
+        </div>
+    </nav>
+
+    <div class="container">
+        {% with messages = get_flashed_messages(with_categories=true) %}
+          {% if messages %}
+            {% for category, message in messages %}
+              <div class="alert alert-{{ category }}">{{ message }}</div>
+            {% endfor %}
+          {% endif %}
+        {% endwith %}
+
+        {% block content %}{% endblock %}
+    </div>
+
+    <footer>
+        <p>&copy; 2024 Application Loto</p>
+    </footer>
+
+</body>
+</html>

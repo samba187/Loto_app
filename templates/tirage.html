@@ -1,0 +1,102 @@
+<!-- templates/tirage.html -->
+
+{% extends "base.html" %}
+
+{% block title %}Résultats du tirage - Application Loto{% endblock %}
+
+{% block content %}
+<style>
+    .boule {
+        display: inline-block;
+        margin: 2px;
+        padding: 10px;
+        border-radius: 50%;
+        background-color: #d9edf7;
+        color: #333;
+        width: 30px;
+        height: 30px;
+        text-align: center;
+        line-height: 30px;
+    }
+    .etoile {
+        display: inline-block;
+        margin: 2px;
+        padding: 10px;
+        border-radius: 50%;
+        background-color: #ffe680;
+        color: #333;
+        width: 30px;
+        height: 30px;
+        text-align: center;
+        line-height: 30px;
+    }
+</style>
+
+<h2>Résultats du tirage</h2>
+<p><strong>Montant total du tirage :</strong> {{ montant }}€</p>
+
+<p><strong>Numéros gagnants :</strong></p>
+<div class="boules">
+    {% for num in numeros_gagnants %}
+    <div class="boule">{{ num }}</div>
+    {% endfor %}
+</div>
+
+<p><strong>Étoiles gagnantes :</strong></p>
+<div class="etoiles">
+    {% for num in etoiles_gagnantes %}
+    <div class="etoile">{{ num }}</div>
+    {% endfor %}
+</div>
+
+<h3>Classement des joueurs participants</h3>
+<table border="1">
+    <tr>
+        <th>Classement</th>
+        <th>Pseudo</th>
+        <th>Numéros joués</th>
+        <th>Étoiles jouées</th>
+        <th>Bons numéros</th>
+        <th>Bonnes étoiles</th>
+        <th>Gain</th>
+        <th>Action</th>
+    </tr>
+    {% for res in resultats %}
+    <tr>
+        <td>{{ res.classement }}</td>
+        <td>{{ res.pseudo }}</td>
+        <td>
+            <div class="boules">
+                {% for num in res.numeros %}
+                <div class="boule">{{ num }}</div>
+                {% endfor %}
+            </div>
+        </td>
+        <td>
+            <div class="etoiles">
+                {% for num in res.etoiles %}
+                <div class="etoile">{{ num }}</div>
+                {% endfor %}
+            </div>
+        </td>
+        <td>{{ res.bons_numeros }}</td>
+        <td>{{ res.bonnes_etoiles }}</td>
+        <td>
+            {% if res.gain > 0 %}
+            {{ res.gain }}€<br>
+            ({{ res.pourcentage_gain }}%)
+            {% else %}
+            0€
+            {% endif %}
+        </td>
+        <td>
+            {% if res.gain > 0 %}
+            <a href="{{ url_for('reclamer_gain', joueur_id=res.joueur_id) }}" class="btn btn-primary">Réclamer Récompense</a>
+            {% else %}
+            Pas de gain
+            {% endif %}
+        </td>
+    </tr>
+    {% endfor %}
+</table>
+{% endblock %}

@@ -1,0 +1,14 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Confirmer la suppression</title>
+</head>
+<body>
+    <h1>Supprimer le joueur {{ joueur.pseudo }}</h1>
+    <p>Êtes-vous sûr de vouloir supprimer le joueur "<strong>{{ joueur.pseudo }}</strong>" ? Cette action est irréversible.</p>
+    <form method="post">
+        <input type="submit" value="Confirmer la suppression">
+        <a href="{{ url_for('index') }}">Annuler</a>
+    </form>
+</body>
+</html>
